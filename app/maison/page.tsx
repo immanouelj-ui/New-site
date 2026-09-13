@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/ui/PageHero";
 import { FlowDiagram } from "@/components/maison/FlowDiagram";
 import { Section, SectionHeading } from "@/components/ui/Section";
@@ -7,6 +8,7 @@ import { BorneCard } from "@/components/bornes/BorneCard";
 import { PlaceholderMedia } from "@/components/ui/PlaceholderMedia";
 import { FinalCTA } from "@/components/home/FinalCTA";
 import { bornes } from "@/lib/content/bornes";
+import { FLAGSHIP_CITY_NAME, FLAGSHIP_CITY_PROJECT_PATHS } from "@/lib/geo/constants";
 
 export const metadata: Metadata = {
   title: "Borne de recharge à domicile",
@@ -95,6 +97,27 @@ export default function MaisonPage() {
               </p>
             </div>
           </div>
+        </Reveal>
+      </Section>
+
+      <Section id="exemple-local" className="bg-paper-dim">
+        <Reveal>
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+            Voir un exemple local
+          </p>
+          <Link
+            href={FLAGSHIP_CITY_PROJECT_PATHS.maison}
+            className="link-underline mt-3 inline-block font-display text-xl font-semibold tracking-tight text-ink"
+          >
+            Borne de recharge maison à {FLAGSHIP_CITY_NAME} →
+          </Link>
+          <p className="mt-2 max-w-md text-sm text-muted">
+            Découvrez comment nous adaptons cette solution à un contexte local précis, ou{" "}
+            <Link href="/installation-borne-recharge" className="link-underline text-ink">
+              explorez toutes nos zones d&apos;intervention
+            </Link>
+            .
+          </p>
         </Reveal>
       </Section>
 

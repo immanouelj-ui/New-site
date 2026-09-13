@@ -12,6 +12,16 @@ const nextConfig: NextConfig = {
       { source: "/borne-recharge-entreprise", destination: "/entreprise", permanent: true },
       { source: "/prix-borne-recharge", destination: "/prix", permanent: true },
       { source: "/aides-borne-recharge", destination: "/aides", permanent: true },
+      {
+        source: "/borne-recharge-paris",
+        destination: "/installation-borne-recharge/ile-de-france/paris/paris",
+        permanent: true,
+      },
+      {
+        source: "/borne-recharge-lyon",
+        destination: "/installation-borne-recharge/auvergne-rhone-alpes/rhone/lyon",
+        permanent: true,
+      },
     ];
   },
 };

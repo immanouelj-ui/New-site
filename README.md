@@ -46,6 +46,59 @@ qu'aucun asset ne permettait de créer. Elle respecte
 
 ### CMS
 
-Le contenu est séparé du code dans `lib/content/`. Ces fichiers TypeScript
-peuvent être remplacés par des appels à un CMS headless ou une base de
-données sans changer les composants qui les consomment.
+Le contenu commercial (bornes, prix, aides, avis…) est séparé du code dans
+`lib/content/`. Ces fichiers TypeScript peuvent être remplacés par des
+appels à un CMS headless sans changer les composants qui les consomment.
+
+### Module SEO local national (régions → départements → villes)
+
+La couverture géographique nationale vit dans une vraie base de données
+(Supabase Postgres, projet `manu`, tables préfixées `evcharge_` dans le
+schéma `public` — voir `lib/supabase/client.ts` et `lib/geo/`), **pas**
+dans le code. C'est la base qui permet d'ajouter une région, un département
+ou une ville sans toucher aux composants.
+
+Variables d'environnement requises (voir `.env.example`) :
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+
+**Hiérarchie** : `evcharge_regions` → `evcharge_departments` →
+`evcharge_cities` → `evcharge_city_content` / `evcharge_city_project_pages`
+(pages maison/copropriété/entreprise par ville) ; `evcharge_faqs` (portée
+région/département/ville) et `evcharge_city_neighbors` complètent le
+maillage. Routes : `/installation-borne-recharge/[region]/[department]/[city]/[projectType]`.
+
+**Base réelle chargée** : les 18 régions et 101 départements français
+(noms, codes INSEE officiels, préfectures) sont tous en base — rien n'est
+inventé. Seuls trois départements sont `published` avec un contenu
+éditorial réel et différencié par ville (Val-d'Oise avec Arnouville,
+Gonesse, Sarcelles, Garges-lès-Gonesse et Villiers-le-Bel ; Paris ; Rhône
+avec Lyon) : c'est l'exemple travaillé en profondeur. Les autres
+départements existent en base mais restent `published = false` — pas de
+page générée tant qu'un contenu réel n'est écrit, conformément à la
+consigne « ne jamais publier des pages minces en masse ». Un
+département/ville non publié n'apparaît jamais comme lien cliquable (juste
+en texte sous « Couverture à venir ») et son URL renvoie un 404 propre si
+on la visite directement.
+
+**Pour publier une nouvelle ville** : ajouter la ligne dans
+`evcharge_cities` (`published = true`), écrire un `evcharge_city_content`
+réel et différencié (jamais un simple remplissage de variables), puis
+`published = true` sur son département et sa région si besoin. Le
+sitemap, les breadcrumbs, le JSON-LD et le maillage interne (villes
+voisines, montée région/département) se génèrent automatiquement.
+
+**Ne jamais inventer** : population, code INSEE de commune, prix, avis,
+certifications et contraintes locales restent `null`/absents tant qu'ils
+ne sont pas vérifiés — l'UI masque proprement le champ plutôt que
+d'afficher une valeur inventée.
+
+**Sitemaps** : `/sitemap.xml` est un index pointant vers
+`sitemap-services.xml`, `sitemap-regions.xml`, `sitemap-departements.xml`,
+`sitemap-villes.xml` et `sitemap-guides.xml` (`app/sitemap-*.xml/route.ts`),
+chacun ne listant que des pages réellement publiées.
+
+**Trouver mon installateur / géolocalisation** : `components/geo/CoverageFinder.tsx`
+(recherche ville/CP) et `components/geo/LocationBanner.tsx` (bandeau non
+intrusif, géolocalisation à la demande de l'utilisateur uniquement,
+jamais déclenchée automatiquement) interrogent la même base — aucune
+couverture n'est jamais affirmée pour une ville absente de la base.

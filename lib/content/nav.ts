@@ -26,5 +26,6 @@ export const footerNav = {
     { label: "Quelle borne choisir ?", href: "/quelle-borne-recharge-choisir" },
     { label: "Aides financières", href: "/aides" },
     { label: "Droit à la prise", href: "/droit-a-la-prise" },
+    { label: "Nos zones d'intervention", href: "/installation-borne-recharge" },
   ],
 } as const;

@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/ui/PageHero";
 import { Section, SectionHeading } from "@/components/ui/Section";
-import { RevealGroup, RevealItem } from "@/components/ui/Reveal";
+import { RevealGroup, RevealItem, Reveal } from "@/components/ui/Reveal";
 import { ScaleVisualization } from "@/components/entreprise/ScaleVisualization";
 import { BorneCard } from "@/components/bornes/BorneCard";
 import { FinalCTA } from "@/components/home/FinalCTA";
 import { bornes } from "@/lib/content/bornes";
+import { FLAGSHIP_CITY_NAME, FLAGSHIP_CITY_PROJECT_PATHS } from "@/lib/geo/constants";
 
 export const metadata: Metadata = {
   title: "Borne de recharge pour entreprise",
@@ -61,6 +63,27 @@ export default function EntreprisePage() {
             <BorneCard key={b.slug} borne={b} />
           ))}
         </div>
+      </Section>
+
+      <Section id="exemple-local" className="bg-paper-dim">
+        <Reveal>
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+            Voir un exemple local
+          </p>
+          <Link
+            href={FLAGSHIP_CITY_PROJECT_PATHS.entreprise}
+            className="link-underline mt-3 inline-block font-display text-xl font-semibold tracking-tight text-ink"
+          >
+            Borne de recharge entreprise à {FLAGSHIP_CITY_NAME} →
+          </Link>
+          <p className="mt-2 max-w-md text-sm text-muted">
+            Découvrez comment nous adaptons cette solution à un contexte local précis, ou{" "}
+            <Link href="/installation-borne-recharge" className="link-underline text-ink">
+              explorez toutes nos zones d&apos;intervention
+            </Link>
+            .
+          </p>
+        </Reveal>
       </Section>
 
       <FinalCTA />

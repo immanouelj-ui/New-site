@@ -4,10 +4,14 @@ import { PageHero } from "@/components/ui/PageHero";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { FinalCTA } from "@/components/home/FinalCTA";
+import { CoverageFinder } from "@/components/geo/CoverageFinder";
+import { getPublishedRegions, regionPath } from "@/lib/geo/queries";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Installation de borne de recharge",
-  description: "Tout comprendre sur l'installation d'une borne de recharge pour véhicule électrique : étapes, acteurs, réglementation.",
+  description: "Tout comprendre sur l'installation d'une borne de recharge pour véhicule électrique : étapes, acteurs, réglementation, couverture par région.",
 };
 
 const audiences = [
@@ -16,7 +20,9 @@ const audiences = [
   { title: "En entreprise", description: "Parking, flotte, supervision multisite.", href: "/entreprise" },
 ];
 
-export default function InstallationBorneRechargePage() {
+export default async function InstallationBorneRechargePage() {
+  const regions = await getPublishedRegions();
+
   return (
     <>
       <PageHero
@@ -24,6 +30,10 @@ export default function InstallationBorneRechargePage() {
         title="Installer une borne de recharge : ce qu'il faut savoir."
         description="Que vous soyez particulier, copropriétaire ou entreprise, l'installation d'une borne de recharge suit une logique commune : étude, dimensionnement, installation qualifiée."
       />
+
+      <Section id="trouver-installateur" className="pt-0 md:pt-0">
+        <CoverageFinder />
+      </Section>
 
       <Section id="etapes">
         <SectionHeading eyebrow="Les grandes étapes" title="Une méthode commune à tous les projets." />
@@ -67,6 +77,28 @@ export default function InstallationBorneRechargePage() {
             </RevealItem>
           ))}
         </RevealGroup>
+      </Section>
+
+      <Section id="regions">
+        <SectionHeading
+          eyebrow="France entière"
+          title="Notre couverture, région par région."
+          description="Nous développons notre couverture progressivement. Chaque région dispose de sa propre page, avec le détail des départements et des villes couverts."
+        />
+        <div className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {regions.map((r) => (
+            <Link
+              key={r.id}
+              href={regionPath(r)}
+              className="group flex items-center justify-between rounded-[var(--radius-md)] border border-ink/8 px-5 py-4 transition-all duration-300 hover:border-ink/25 hover:shadow-sm"
+            >
+              <span className="font-medium text-ink">{r.name}</span>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="text-ink/40 transition-transform duration-300 group-hover:translate-x-1">
+                <path d="M3 8h10m0 0-4-4m4 4-4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+          ))}
+        </div>
       </Section>
 
       <FinalCTA />

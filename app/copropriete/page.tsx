@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/ui/PageHero";
 import { Section, SectionHeading } from "@/components/ui/Section";
-import { RevealGroup, RevealItem } from "@/components/ui/Reveal";
+import { RevealGroup, RevealItem, Reveal } from "@/components/ui/Reveal";
 import { AudienceTabs } from "@/components/copropriete/AudienceTabs";
 import { FinalCTA } from "@/components/home/FinalCTA";
 import { droitALaPriseSummary } from "@/lib/content/aides";
+import { FLAGSHIP_CITY_NAME, FLAGSHIP_CITY_PROJECT_PATHS } from "@/lib/geo/constants";
 
 export const metadata: Metadata = {
   title: "Borne de recharge en copropriété",
@@ -70,6 +72,27 @@ export default function CoproprietePage() {
             En savoir plus sur le droit à la prise →
           </a>
         </div>
+      </Section>
+
+      <Section id="exemple-local" className="bg-paper-dim">
+        <Reveal>
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+            Voir un exemple local
+          </p>
+          <Link
+            href={FLAGSHIP_CITY_PROJECT_PATHS.copropriete}
+            className="link-underline mt-3 inline-block font-display text-xl font-semibold tracking-tight text-ink"
+          >
+            Borne de recharge copropriété à {FLAGSHIP_CITY_NAME} →
+          </Link>
+          <p className="mt-2 max-w-md text-sm text-muted">
+            Découvrez comment nous adaptons cette solution à un contexte local précis, ou{" "}
+            <Link href="/installation-borne-recharge" className="link-underline text-ink">
+              explorez toutes nos zones d&apos;intervention
+            </Link>
+            .
+          </p>
+        </Reveal>
       </Section>
 
       <FinalCTA />
